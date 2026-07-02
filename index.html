@@ -54,12 +54,12 @@
 </head>
 <body>
     <div class="header">
-        <h1>🥙 Döner Gourmet</h1>
+        <h1>🟙 Döner Gourmet</h1>
         <p>Tradición turca con pasión artesanal</p>
     </div>
     <div class="container">
         <div class="category">
-            <div class="category-title">🥙 Döner Gourmet</div>
+            <div class="category-title">🏙 Döner Gourmet</div>
             <div class="category-desc">Guarnición de ensalada y patatas incluidas</div>
             <div class="product" data-product="durum-normal" data-price="4.00">
                 <div class="product-header" onclick="toggleCustomize('custom-durum')">
@@ -111,12 +111,12 @@
             </div>
         </div>
         <div class="category">
-            <div class="category-title">🍔 Hamburguesa</div>
+            <div class="category-title">🍌 Hamburguesa</div>
             <div class="product" data-product="hamburguesa" data-price="7.00">
                 <div class="product-header" onclick="toggleCustomize('custom-hamburguesa')">
                     <div>
                         <span class="product-name">Carne vacuno 100%</span>
-                        <div class="product-ingredients">Huevo · cebolla caramelizada · queso · tomate · lechuga</div>
+                        <div class="product-ingredients">Huevo · cebolla caramelmzada · queso ·tomate · lechuga</div>
                     </div>
                     <span class="product-price">7,00€</span>
                 </div>
@@ -124,11 +124,11 @@
                     <div class="customize-inner">
                         <span class="option-label">Quitar ingredientes:</span>
                         <div class="ingredient-toggles" id="hamburguesa-ingredients">
-                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="huevo">🥚 Huevo ✕</span>
-                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="cebolla">🧅 Cebolla ✕</span>
-                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="queso">🧀 Queso ✕</span>
-                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="tomate">🍅 Tomate ✕</span>
-                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="lechuga">🥬 Lechuga ✕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="huevo">🔪 Huevo ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="cebolla">🍅 Cebolla ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="queso">🸀 Queso ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="tomate">🍌 Tomate ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="lechuga">🌬 Lechuga ❕</span>
                         </div>
                         <span class="option-label" style="margin-top:8px;display:block">Extras:</span>
                         <div class="checkbox-item">
@@ -153,10 +153,10 @@
             </div>
         </div>
         <div class="category">
-            <div class="category-title">🧀 Complementos</div>
+            <div class="category-title">🤀Complementos</div>
             <div class="complementos-grid">
                 <div class="complemento-card" data-comp="patatas" data-price="2.50" onclick="toggleComplemento(this)">
-                    <div class="name">🍟 Patatas</div>
+                    <div class="name">🔟 Patatas</div>
                     <div class="price">2,50€</div>
                     <div class="qty-inline">
                         <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('patatas', -1)">−</button>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="complemento-card" data-comp="refrescos" data-price="1.50" onclick="toggleComplemento(this)">
-                    <div class="name">🥤 Refrescos</div>
+                    <div class="name">🤤 Refrescos</div>
                     <div class="price">1,50€</div>
                     <div class="qty-inline">
                         <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('refrescos', -1)">−</button>
@@ -174,7 +174,7 @@
                     </div>
                 </div>
                 <div class="complemento-card" data-comp="cheddar" data-price="0.50" onclick="toggleComplemento(this)">
-                    <div class="name">🧀 Queso cheddar</div>
+                    <div class="name">🤀ueso cheddar</div>
                     <div class="price">0,50€</div>
                     <div class="qty-inline">
                         <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('cheddar', -1)">−</button>
@@ -195,16 +195,16 @@
     </div>
     <div class="bottom-bar">
         <div class="total-display">Total<span class="amount" id="total-amount">0,00€</span></div>
-        <button class="btn-pedido" id="btn-pedido" onclick="sendOrder()" disabled>💬 Pedir por WhatsApp</button>
+        <button class="btn-pedido" id="btn-pedido" onclick="sendOrder()" disabled>█ Pedir por WhatsApp</button>
     </div>
     <script>
-        const WHATSAPP_NUMBER = "34662047005";
+        const WHASAPP_NUMBER = "34662047005";
         const productos = {
             'durum-normal': { name: 'Durum normal', basePrice: 4.00, qty: 0, extras: {} },
             'durum-grande': { name: 'Durum grande', basePrice: 6.00, qty: 0, extras: {} },
             'hamburguesa': { name: 'Hamburguesa vacuno', basePrice: 7.00, qty: 0, extras: {}, removedIngredients: [] }
         };
-        const complementos = { 'patatas': { name: '🍟 Patatas', price: 2.50, qty: 0 }, 'refrescos': { name: '🥤 Refrescos', price: 1.50, qty: 0 }, 'cheddar': { name: '🧀 Queso cheddar', price: 0.50, qty: 0 } };
+        const complementos = { 'patatas': { name: '🔟 Patatas', price: 2.50, qty: 0 }, 'refrescos': { name: '⟤ Refrescos', price: 1.50, qty: 0 }, 'cheddar': { name: '🤀ueso cheddar', price: 0.50, qty: 0 } };
         function toggleCustomize(id) { const el = document.getElementById(id); el.classList.toggle('open'); }
         function changeQty(productId, delta) {
             const p = productos[productId]; p.qty = Math.max(0, p.qty + delta);
@@ -252,7 +252,7 @@
             document.getElementById('total-amount').textContent = total.toFixed(2).replace('.', ',') + '€';
             document.getElementById('btn-pedido').disabled = !hasItems;
             const rd = document.getElementById('resumen'); const ri = document.getElementById('resumen-items');
-            if (items.length > 0) { rd.style.display = 'block'; ri.innerHTML = items.map(item => '<div class="item-in-cart"><span>' + item.desc + '</span><span style="font-weight:600;color:#c0392b;">' + item.total.toFixed(2).replace('.', ',') + '€</span></div>').join(''); }
+            if (items.length > 0) { rd.style.display = 'block'; ri.innerHTML = items.map(item => '<div class="item-in-cart"><span>' + item.desc + '</span><span style="font-weight:600;color:#c0392b;">' + item.total.toFixed(2).replace('.', ',') + 'ガ</span></div>').join(''); }
             else rd.style.display = 'none';
         }
         function getExtrasTotal(productId) {
@@ -262,7 +262,7 @@
             return total;
         }
         function getExtrasList(productId) {
-            const names = { 'extra_carne': 'extra carne', 'extra_salsa': 'extra salsa', 'doble': 'doble', 'menu': 'menu', 'cheddar': 'cheddar extra' };
+            const names = { 'extra_carne': 'extra carne', 'extra_salsa': 'extra salsa', 'doble': 'doble', 'menu': 'menú', 'cheddar': 'cheddar extra' };
             const extras = [];
             const sectionId = productId === 'durum-normal' ? 'custom-durum' : productId === 'durum-grande' ? 'custom-durum-grande' : 'custom-hamburguesa';
             document.querySelectorAll('#' + sectionId + ' input[type="checkbox"]').forEach(cb => { if (cb.checked) { const a = cb.getAttribute('data-addon'); if (names[a]) extras.push(names[a]); } });
@@ -271,9 +271,9 @@
         function sendOrder() {
             const clientName = (document.getElementById('client-name').value || '').trim() || 'Cliente';
             const lines = [];
-            lines.push('\u{1f6f5} *NUEVO PEDIDO - D\u00f6ner Gourmet* \u{1f6f5}');
-            lines.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
-            lines.push('\u{1f464} *Cliente:* ' + clientName);
+            lines.push('🕵 *NUEVO PEDIDO - Döner Gourmet* 🕵');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
+            lines.push('💤 *Liente:*' + clientName);
             lines.push('');
             for (const [id, p] of Object.entries(productos)) {
                 if (p.qty > 0) {
@@ -289,27 +289,27 @@
                     }
                     const extras = getExtrasList(id);
                     if (extras.length > 0) details.push('+' + extras.join(', +'));
-                    let line = '\u25b8 *' + p.name + '* \u00d7' + p.qty;
+                    let line = '⸸ *' + p.name + '* ×' + p.qty;
                     if (details.length > 0) line += ' (' + details.join(' | ') + ')';
-                    line += ' \u2014 ' + itemTotal.toFixed(2).replace('.', ',') + '\u20ac';
+                    line += ' — ' + itemTotal.toFixed(2).replace('.', ',') + 'ガ';
                     lines.push(line);
                 }
             }
             let compsAdded = false;
             for (const [id, c] of Object.entries(complementos)) {
                 if (c.qty > 0) {
-                    if (!compsAdded) { lines.push(''); lines.push('\u{1f9c0} *Complementos*'); compsAdded = true; }
-                    lines.push('\u25b8 ' + c.name + ' \u00d7' + c.qty + ' \u2014 ' + (c.price * c.qty).toFixed(2).replace('.', ',') + '\u20ac');
+                    if (!compsAdded) { lines.push(''); lines.push('🤀 *Complementos*'); compsAdded = true; }
+                    lines.push('∸ ' + c.name + ' ×' + c.qty + ' — ' + (c.price * c.qty).toFixed(2).replace('.', ',') + 'ガ');
                 }
             }
             const totalText = document.getElementById('total-amount').textContent;
             lines.push('');
-            lines.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
-            lines.push('\u{1f4b0} *TOTAL: ' + totalText + '*');
-            lines.push('\u23f1\ufe0f *Tiempo estimado:* 15 min');
-            lines.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
+            lines.push('💰 *TOTAL: ' + totalText + '*');
+            lines.push('㣱️ *Tiempo estimado:* 15 min');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
             lines.push('');
-            lines.push('\u2705 _Gracias por tu pedido! Lo preparamos en breve._');
+            lines.push('✅ _Gracias por tu pedido. Lo preparamos en breve._');
             const msg = lines.join('\\n');
             const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
             window.open(url, '_blank');
