@@ -1,1 +1,320 @@
-...
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Döner Gourmet</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #faf7f2; color: #1a1a1a; padding-bottom: 100px; }
+        .header { background: linear-gradient(135deg, #c0392b, #e74c3c); color: #fff; padding: 32px 20px 20px; text-align: center; }
+        .header h1 { font-size: 28px; font-weight: 800; }
+        .header p { font-size: 14px; opacity: .9; margin-top: 4px; }
+        .container { max-width: 500px; margin: 0 auto; padding: 16px; }
+        .category { margin-bottom: 24px; }
+        .category-title { font-size: 20px; font-weight: 700; color: #c0392b; padding: 12px 0 8px; border-bottom: 2px solid #e8ddd0; }
+        .category-desc { font-size: 13px; color: #888; margin: 4px 0 12px; }
+        .product { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.06); border: 2px solid transparent; }
+        .product.selected { border-color: #c0392b; background: #fef5f3; }
+        .product-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .product-name { font-weight: 600; font-size: 16px; }
+        .product-price { font-weight: 700; color: #c0392b; font-size: 16px; }
+        .product-ingredients { font-size: 12px; color: #888; margin-top: 2px; }
+        .customize-area { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+        .customize-area.open { max-height: 600px; }
+        .customize-inner { padding-top: 12px; border-top: 1px solid #eee; margin-top: 10px; }
+        .option-label { font-size: 14px; font-weight: 600; color: #555; margin-bottom: 6px; display: block; }
+        .checkbox-item { display: flex; align-items: center; padding: 6px 0; gap: 8px; }
+        .checkbox-item label { font-size: 15px; flex: 1; display: flex; justify-content: space-between; cursor: pointer; }
+        .checkbox-item input { width: 18px; height: 18px; accent-color: #c0392b; }
+        .qty-control { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ddd; background: #fff; font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #c0392b; }
+        .qty-value { font-size: 18px; font-weight: 600; min-width: 24px; text-align: center; }
+        .ingredient-toggles { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+        .ingredient-tag { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 20px; font-size: 13px; border: 1px solid #ddd; background: #fff; cursor: pointer; user-select: none; }
+        .ingredient-tag.active { background: #c0392b; color: #fff; border-color: #c0392b; }
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 12px 16px; box-shadow: 0 -2px 10px rgba(0,0,0,.1); display: flex; align-items: center; justify-content: space-between; z-index: 100; }
+        .total-display { font-size: 14px; color: #666; }
+        .total-display .amount { font-size: 22px; font-weight: 800; color: #c0392b; display: block; }
+        .btn-pedido { background: #25d366; color: #fff; border: none; padding: 14px 28px; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,211,102,.3); }
+        .btn-pedido:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+        .complementos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .complemento-card { background: #fff; border-radius: 10px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); cursor: pointer; border: 2px solid transparent; }
+        .complemento-card.selected { border-color: #c0392b; background: #fef5f3; }
+        .complemento-card .name { font-size: 14px; font-weight: 600; }
+        .complemento-card .price { font-size: 13px; color: #c0392b; font-weight: 700; margin-top: 2px; }
+        .complemento-card .qty-inline { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px; }
+        .complemento-card .qty-inline .qty-btn { width: 26px; height: 26px; font-size: 14px; }
+        .complemento-card .qty-inline .qty-value { font-size: 14px; min-width: 18px; }
+        .item-in-cart { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        #resumen { margin-top: 8px; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+        .name-input-bar { background: #fff; border-radius: 12px; padding: 12px 16px; margin: 0 16px 10px; box-shadow: 0 1px 3px rgba(0,0,0,.06); display: flex; align-items: center; gap: 10px; }
+        .name-input-bar input { flex: 1; border: none; font-size: 15px; outline: none; background: transparent; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🟙 Döner Gourmet</h1>
+        <p>Tradición turca con pasión artesanal</p>
+    </div>
+    <div class="container">
+        <div class="category">
+            <div class="category-title">🏙 Döner Gourmet</div>
+            <div class="category-desc">Guarnición de ensalada y patatas incluidas</div>
+            <div class="product" data-product="durum-normal" data-price="4.00">
+                <div class="product-header" onclick="toggleCustomize('custom-durum')">
+                    <span class="product-name">Durum normal</span>
+                    <span class="product-price">4,00€</span>
+                </div>
+                <div class="customize-area" id="custom-durum">
+                    <div class="customize-inner">
+                        <span class="option-label">Extras:</span>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="d-extra-carne" data-addon="extra_carne" data-price="2.00" onchange="recalc()">
+                            <label for="d-extra-carne"><span>Extra carne</span><span>+2,00€</span></label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="d-extra-salsa" data-addon="extra_salsa" data-price="0.50" onchange="recalc()">
+                            <label for="d-extra-salsa"><span>Extra salsa</span><span>+0,50€</span></label>
+                        </div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty('durum-normal', -1)">−</button>
+                            <span class="qty-value" id="qty-durum-normal">0</span>
+                            <button class="qty-btn" onclick="changeQty('durum-normal', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product" data-product="durum-grande" data-price="6.00">
+                <div class="product-header" onclick="toggleCustomize('custom-durum-grande')">
+                    <span class="product-name">Durum grande</span>
+                    <span class="product-price">6,00€</span>
+                </div>
+                <div class="customize-area" id="custom-durum-grande">
+                    <div class="customize-inner">
+                        <span class="option-label">Extras:</span>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="dg-extra-carne" data-addon="extra_carne" data-price="2.00" onchange="recalc()">
+                            <label for="dg-extra-carne"><span>Extra carne</span><span>+2,00€</span></label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="dg-extra-salsa" data-addon="extra_salsa" data-price="0.50" onchange="recalc()">
+                            <label for="dg-extra-salsa"><span>Extra salsa</span><span>+0,50€</span></label>
+                        </div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty('durum-grande', -1)">−</button>
+                            <span class="qty-value" id="qty-durum-grande">0</span>
+                            <button class="qty-btn" onclick="changeQty('durum-grande', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="category">
+            <div class="category-title">🍌 Hamburguesa</div>
+            <div class="product" data-product="hamburguesa" data-price="7.00">
+                <div class="product-header" onclick="toggleCustomize('custom-hamburguesa')">
+                    <div>
+                        <span class="product-name">Carne vacuno 100%</span>
+                        <div class="product-ingredients">Huevo · cebolla caramelmzada · queso ·tomate · lechuga</div>
+                    </div>
+                    <span class="product-price">7,00€</span>
+                </div>
+                <div class="customize-area" id="custom-hamburguesa">
+                    <div class="customize-inner">
+                        <span class="option-label">Quitar ingredientes:</span>
+                        <div class="ingredient-toggles" id="hamburguesa-ingredients">
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="huevo">🔪 Huevo ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="cebolla">🍅 Cebolla ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="queso">🸀 Queso ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="tomate">🍌 Tomate ❕</span>
+                            <span class="ingredient-tag active" onclick="toggleIngredient(this)" data-ing="lechuga">🌬 Lechuga ❕</span>
+                        </div>
+                        <span class="option-label" style="margin-top:8px;display:block">Extras:</span>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="h-doble" data-addon="doble" data-price="3.00" onchange="recalc()">
+                            <label for="h-doble"><span>Doble</span> <span>+3,00€</span></label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="h-menu" data-addon="menu" data-price="3.00" onchange="recalc()">
+                            <label for="h-menu"><span>Menú (patatas + refresco)</span> <span>+3,00€</span></label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="h-cheddar" data-addon="cheddar" data-price="0.50" onchange="recalc()">
+                            <label for="h-cheddar"><span>Queso cheddar extra</span> <span>+0,50€</span></label>
+                        </div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty('hamburguesa', -1)">−</button>
+                            <span class="qty-value" id="qty-hamburguesa">0</span>
+                            <button class="qty-btn" onclick="changeQty('hamburguesa', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="category">
+            <div class="category-title">🤀Complementos</div>
+            <div class="complementos-grid">
+                <div class="complemento-card" data-comp="patatas" data-price="2.50" onclick="toggleComplemento(this)">
+                    <div class="name">🔟 Patatas</div>
+                    <div class="price">2,50€</div>
+                    <div class="qty-inline">
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('patatas', -1)">−</button>
+                        <span class="qty-value" id="qty-patatas">0</span>
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('patatas', 1)">+</button>
+                    </div>
+                </div>
+                <div class="complemento-card" data-comp="refrescos" data-price="1.50" onclick="toggleComplemento(this)">
+                    <div class="name">🤤 Refrescos</div>
+                    <div class="price">1,50€</div>
+                    <div class="qty-inline">
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('refrescos', -1)">−</button>
+                        <span class="qty-value" id="qty-refrescos">0</span>
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('refrescos', 1)">+</button>
+                    </div>
+                </div>
+                <div class="complemento-card" data-comp="cheddar" data-price="0.50" onclick="toggleComplemento(this)">
+                    <div class="name">🤀ueso cheddar</div>
+                    <div class="price">0,50€</div>
+                    <div class="qty-inline">
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('cheddar', -1)">−</button>
+                        <span class="qty-value" id="qty-cheddar">0</span>
+                        <button class="qty-btn" onclick="event.stopPropagation();changeCompQty('cheddar', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="resumen" style="display:none">
+            <div style="font-weight:700;font-size:16px;margin-bottom:8px">📋 Tu pedido</div>
+            <div id="resumen-items"></div>
+        </div>
+    </div>
+    <div class="name-input-bar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        <input type="text" id="client-name" maxlength="30" placeholder="Tu nombre" autocomplete="off">
+    </div>
+    <div class="bottom-bar">
+        <div class="total-display">Total<span class="amount" id="total-amount">0,00€</span></div>
+        <button class="btn-pedido" id="btn-pedido" onclick="sendOrder()" disabled>█ Pedir por WhatsApp</button>
+    </div>
+    <script>
+        const WHASAPP_NUMBER = "34662047005";
+        const productos = {
+            'durum-normal': { name: 'Durum normal', basePrice: 4.00, qty: 0, extras: {} },
+            'durum-grande': { name: 'Durum grande', basePrice: 6.00, qty: 0, extras: {} },
+            'hamburguesa': { name: 'Hamburguesa vacuno', basePrice: 7.00, qty: 0, extras: {}, removedIngredients: [] }
+        };
+        const complementos = { 'patatas': { name: '🔟 Patatas', price: 2.50, qty: 0 }, 'refrescos': { name: '⟤ Refrescos', price: 1.50, qty: 0 }, 'cheddar': { name: '🤀ueso cheddar', price: 0.50, qty: 0 } };
+        function toggleCustomize(id) { const el = document.getElementById(id); el.classList.toggle('open'); }
+        function changeQty(productId, delta) {
+            const p = productos[productId]; p.qty = Math.max(0, p.qty + delta);
+            document.getElementById('qty-' + productId).textContent = p.qty;
+            document.querySelector('[data-product="' + productId + '"]').classList.toggle('selected', p.qty > 0);
+            recalc();
+        }
+        function changeCompQty(compId, delta) {
+            const c = complementos[compId]; c.qty = Math.max(0, c.qty + delta);
+            document.getElementById('qty-' + compId).textContent = c.qty;
+            document.querySelector('[data-comp="' + compId + '"]').classList.toggle('selected', c.qty > 0);
+            recalc();
+        }
+        function toggleComplemento(el) { changeCompQty(el.getAttribute('data-comp'), 1); }
+        function toggleIngredient(el) { el.classList.toggle('active'); recalc(); }
+        function getHamburgerRemoved() {
+            const tags = document.querySelectorAll('#hamburguesa-ingredients .ingredient-tag');
+            const removed = []; tags.forEach(tag => { if (!tag.classList.contains('active')) removed.push(tag.getAttribute('data-ing')); });
+            return removed;
+        }
+        function recalc() {
+            let total = 0, hasItems = false, items = [];
+            for (const [id, p] of Object.entries(productos)) {
+                if (p.qty > 0) {
+                    hasItems = true;
+                    const extrasTotal = getExtrasTotal(id);
+                    const itemTotal = (p.basePrice + extrasTotal) * p.qty;
+                    total += itemTotal;
+                    let desc = p.name;
+                    if (id === 'hamburguesa') {
+                        const removed = getHamburgerRemoved();
+                        if (removed.length > 0) {
+                            const names = { 'huevo': 'huevo', 'cebolla': 'cebolla caramelizada', 'queso': 'queso', 'tomate': 'tomate', 'lechuga': 'lechuga' };
+                            desc += ' (sin ' + removed.map(r => names[r] || r).join(', ') + ')';
+                        }
+                    }
+                    const extras = getExtrasList(id);
+                    if (extras.length > 0) desc += ' + ' + extras.join(', ');
+                    items.push({ desc: desc + ' ×' + p.qty, total: itemTotal, id: id });
+                }
+            }
+            for (const [id, c] of Object.entries(complementos)) {
+                if (c.qty > 0) { hasItems = true; const itemTotal = c.price * c.qty; total += itemTotal; items.push({ desc: c.name + ' ×' + c.qty, total: itemTotal }); }
+            }
+            document.getElementById('total-amount').textContent = total.toFixed(2).replace('.', ',') + '€';
+            document.getElementById('btn-pedido').disabled = !hasItems;
+            const rd = document.getElementById('resumen'); const ri = document.getElementById('resumen-items');
+            if (items.length > 0) { rd.style.display = 'block'; ri.innerHTML = items.map(item => '<div class="item-in-cart"><span>' + item.desc + '</span><span style="font-weight:600;color:#c0392b;">' + item.total.toFixed(2).replace('.', ',') + 'ガ</span></div>').join(''); }
+            else rd.style.display = 'none';
+        }
+        function getExtrasTotal(productId) {
+            const sectionId = productId === 'durum-normal' ? 'custom-durum' : productId === 'durum-grande' ? 'custom-durum-grande' : 'custom-hamburguesa';
+            let total = 0;
+            document.querySelectorAll('#' + sectionId + ' input[type="checkbox"]').forEach(cb => { if (cb.checked) total += parseFloat(cb.getAttribute('data-price')); });
+            return total;
+        }
+        function getExtrasList(productId) {
+            const names = { 'extra_carne': 'extra carne', 'extra_salsa': 'extra salsa', 'doble': 'doble', 'menu': 'menú', 'cheddar': 'cheddar extra' };
+            const extras = [];
+            const sectionId = productId === 'durum-normal' ? 'custom-durum' : productId === 'durum-grande' ? 'custom-durum-grande' : 'custom-hamburguesa';
+            document.querySelectorAll('#' + sectionId + ' input[type="checkbox"]').forEach(cb => { if (cb.checked) { const a = cb.getAttribute('data-addon'); if (names[a]) extras.push(names[a]); } });
+            return extras;
+        }
+        function sendOrder() {
+            const clientName = (document.getElementById('client-name').value || '').trim() || 'Cliente';
+            const lines = [];
+            lines.push('🕵 *NUEVO PEDIDO - Döner Gourmet* 🕵');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
+            lines.push('💤 *Liente:*' + clientName);
+            lines.push('');
+            for (const [id, p] of Object.entries(productos)) {
+                if (p.qty > 0) {
+                    const extrasTotal = getExtrasTotal(id);
+                    const itemTotal = (p.basePrice + extrasTotal) * p.qty;
+                    const details = [];
+                    if (id === 'hamburguesa') {
+                        const removed = getHamburgerRemoved();
+                        if (removed.length > 0) {
+                            const names = { 'huevo': 'huevo', 'cebolla': 'cebolla caramelizada', 'queso': 'queso', 'tomate': 'tomate', 'lechuga': 'lechuga' };
+                            details.push('sin ' + removed.map(r => names[r] || r).join(', '));
+                        }
+                    }
+                    const extras = getExtrasList(id);
+                    if (extras.length > 0) details.push('+' + extras.join(', +'));
+                    let line = '⸸ *' + p.name + '* ×' + p.qty;
+                    if (details.length > 0) line += ' (' + details.join(' | ') + ')';
+                    line += ' — ' + itemTotal.toFixed(2).replace('.', ',') + 'ガ';
+                    lines.push(line);
+                }
+            }
+            let compsAdded = false;
+            for (const [id, c] of Object.entries(complementos)) {
+                if (c.qty > 0) {
+                    if (!compsAdded) { lines.push(''); lines.push('🤀 *Complementos*'); compsAdded = true; }
+                    lines.push('∸ ' + c.name + ' ×' + c.qty + ' — ' + (c.price * c.qty).toFixed(2).replace('.', ',') + 'ガ');
+                }
+            }
+            const totalText = document.getElementById('total-amount').textContent;
+            lines.push('');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
+            lines.push('💰 *TOTAL: ' + totalText + '*');
+            lines.push('㣱️ *Tiempo estimado:* 15 min');
+            lines.push('┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐┐');
+            lines.push('');
+            lines.push('✅ _Gracias por tu pedido. Lo preparamos en breve._');
+            const msg = lines.join('\\n');
+            const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+        recalc();
+    </script>
+</body>
+</html>
